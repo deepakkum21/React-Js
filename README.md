@@ -1,5 +1,16 @@
 # React-Js
 
+### React app creation
+
+- `create-react-app` deprecated
+- `vite` recommended
+
+```bash
+npm create vite@latest my-app --template react
+```
+
+---
+
 ### props.children
 
 - special prop that allows you to `pass components or elements between the opening and closing tags of a custom component`.
