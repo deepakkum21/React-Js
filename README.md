@@ -26,3 +26,39 @@ function Card(props) {
 | Automatically passed | ✅ Yes                          | ❌ No — you must explicitly define |
 | Content type         | Usually JSX elements or strings | Any type (string, number, object…) |
 | Use case             | Wrapping/nesting content        | Configuration/data passing         |
+
+---
+
+### Listeners
+
+```jsx
+function Button() {
+  function handleClick() {
+    alert('Button clicked!');
+  }
+
+  return <button onClick={handleClick}>Click Me</button>;
+}
+
+// onClick is the event listener
+// handleClick is the event handler function
+```
+
+```jsx
+function InputExample() {
+  function handleChange(event) {
+    console.log('Input value:', event.target.value);
+  }
+
+  return <input type="text" onChange={handleChange} />;
+}
+```
+
+| Event Name     | When It Triggers             |
+| -------------- | ---------------------------- |
+| `onClick`      | When an element is clicked   |
+| `onChange`     | When input value changes     |
+| `onSubmit`     | When a form is submitted     |
+| `onMouseEnter` | When mouse enters an element |
+| `onKeyDown`    | When a key is pressed down   |
+| `onFocus`      | When an element gains focus  |
