@@ -62,3 +62,23 @@ function InputExample() {
 | `onMouseEnter` | When mouse enters an element |
 | `onKeyDown`    | When a key is pressed down   |
 | `onFocus`      | When an element gains focus  |
+
+---
+
+### Passing Listeners as PROPS
+
+```jsx
+function Parent() {
+  function handleButtonClick() {
+    alert('Button clicked in Child!');
+  }
+
+  return <Child onButtonClick={handleButtonClick} />;
+}
+```
+
+```jsx
+function Child(props) {
+  return <button onClick={props.onButtonClick}>Click Me</button>;
+}
+```
