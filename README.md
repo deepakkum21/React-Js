@@ -16,3 +16,13 @@ function Card(props) {
   <p>This is content inside the Card component.</p>
 </Card>;
 ```
+
+---
+
+### props.children vs props attribute
+
+| Feature              | `props.children`                | Regular props (`props.foo`)        |
+| -------------------- | ------------------------------- | ---------------------------------- |
+| Automatically passed | ✅ Yes                          | ❌ No — you must explicitly define |
+| Content type         | Usually JSX elements or strings | Any type (string, number, object…) |
+| Use case             | Wrapping/nesting content        | Configuration/data passing         |
