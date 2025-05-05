@@ -535,3 +535,31 @@ Panel.Footer = ({ children }) => <div className="panel-footer">{children}</div>;
   <Panel.Footer>Footer Slot</Panel.Footer>
 </Panel>;
 ```
+
+---
+
+### What Does {{ }} Mean in React?
+
+| Syntax | Meaning                             |
+| ------ | ----------------------------------- |
+| `{}`   | Inject JavaScript into JSX          |
+| `{{}}` | Inject an object (e.g. for `style`) |
+
+```jsx
+const styles = {
+  color: 'red',
+  fontSize: '20px',
+};
+
+function Example() {
+  return <div style={styles}>Styled Text</div>;
+}
+
+// or directly
+function Example() {
+  return <div style={{ color: 'red', fontSize: '20px' }}>Styled Text</div>;
+}
+
+// Outer { ... } tells JSX: "I'm injecting JavaScript".
+// Inner { ... } is the actual JavaScript object you're passing (e.g., a style object).
+```
