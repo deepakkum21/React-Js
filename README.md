@@ -9,6 +9,11 @@
 npm create vite@latest my-app --template react
 ```
 
+### Component Functions Must Follow Two Rules
+
+1. `Name Starts With Uppercase Character`
+2. `Returns “Renderable” Content with one return expression`
+
 ---
 
 ### props.children
