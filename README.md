@@ -41,7 +41,7 @@ function Card(props) {
 </Card>;
 ```
 
----
+## ![Children](./img/“children”.png)
 
 ### props.children vs props attribute
 
