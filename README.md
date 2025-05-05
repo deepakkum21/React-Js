@@ -150,3 +150,61 @@ function Counter() {
 - Why?
   - `React only re-renders when state (via useState) or props change.`
   - `Changing regular variables doesn't trigger a re-render.`
+
+---
+
+### Hooks
+
+- special functions introduced in React 16.8
+- Hooks let functional components do everything class components could
+
+| Hook                                                   | Purpose                                                   |
+| ------------------------------------------------------ | --------------------------------------------------------- |
+| `useState`                                             | Adds state to functional components                       |
+| `useEffect`                                            | Handles side effects (data fetching, subscriptions)       |
+| `useContext`                                           | Access React context                                      |
+| `useRef`                                               | Persist values across renders without causing re-renders  |
+| `useMemo`                                              | Memoize expensive calculations                            |
+| `useCallback`                                          | Memoize functions to prevent unnecessary re-renders       |
+| `useReducer`                                           | For complex state logic (Redux-style)                     |
+| `useLayoutEffect`                                      | Like `useEffect`, but fires synchronously after DOM paint |
+| `useImperativeHandle`                                  | Customize instance exposed to parent with `ref`           |
+| `useId`, `useSyncExternalStore`, `useTransition`, etc. | More advanced hooks                                       |
+
+### Where Can Hooks Be Called?
+
+- `At the top level of a React functional component`
+- `Inside another custom hook`
+
+```jsx
+function MyComponent() {
+  const [count, setCount] = useState(0); // ✅ valid  called in top level of a React functional component
+}
+```
+
+```jsx
+function useCustomLogic() {
+  const theme = useContext(ThemeContext); // ✅ valid  called Inside another custom hook
+}
+```
+
+### You CANNOT call hooks:
+
+- `Inside loops, conditions, or nested functions`
+- `Inside class components`
+- `Outside of React components or hooks`
+
+```jsx
+// ❌ DON'T DO THIS
+if (someCondition) {
+  useEffect(() => {
+    // Invalid! Hooks must be unconditional
+  }, []);
+}
+```
+
+```jsx
+function handleClick() {
+  useState(); // ❌ Invalid inside event handlers
+}
+```
