@@ -578,3 +578,65 @@ function Example() {
 // Outer { ... } tells JSX: "I'm injecting JavaScript".
 // Inner { ... } is the actual JavaScript object you're passing (e.g., a style object).
 ```
+
+## Dynamic Component Types
+
+1. ✅ Why?
+
+- Build reusable `layouts that load components conditionally` (e.g. based on config, API data, or user input).
+- `Avoid giant switch or if trees for conditional rendering`.
+- Enable dynamic imports/code-splitting.
+
+2. **How To Use Dynamic Component Types**
+
+```jsx
+// ✅ 1. Component Map + JSX
+const components = {
+  Text: ({ text }) => <p>{text}</p>,
+  Button: ({ label }) => <button>{label}</button>,
+};
+
+function DynamicRenderer({ type, props }) {
+  const Component = components[type];
+  return Component ? <Component {...props} /> : <div>Unknown type</div>;
+}
+
+// Usage:
+<DynamicRenderer type="Text" props={{ text: "Hello!" }} />
+<DynamicRenderer type="Button" props={{ label: "Click Me" }} />
+```
+
+```jsx
+//  2. Dynamic Imports (Lazy Loading)
+const componentMap = {
+  Chart: React.lazy(() => import('./Chart')),
+  Table: React.lazy(() => import('./Table')),
+};
+
+function DynamicComponent({ type }) {
+  const Component = componentMap[type];
+  return Component ? (
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <Component />
+    </React.Suspense>
+  ) : (
+    <div>Not found</div>
+  );
+}
+```
+
+```jsx
+// 3. Using a Tag Name as a String
+function DynamicTag({ tag, children }) {
+  const Tag = tag; // e.g., 'h1', 'div', 'section'
+  return <Tag>{children}</Tag>;
+}
+// OR
+function DynamicTag({ Tag, children }) {
+  // const Tag = tag; // e.g., 'h1', 'div', 'section'
+  return <Tag>{children}</Tag>;
+}
+
+// Usage:
+<DynamicTag tag="h2">Heading</DynamicTag>;
+```
