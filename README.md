@@ -445,3 +445,93 @@ export default function Input({ richText, ...props }) {
   return <>{content}</>;
 }
 ```
+
+### multi jsx slot in react
+
+- its similar to content projection in angular
+- In React, this is mimicked using:
+  - `props.children (default slot)`
+  - `Custom named props for multiple slots`
+  - `Render props or composition`
+
+1. **Named Props as Slots**
+
+```jsx
+function Card({ header, body, footer }) {
+  return (
+    <div className="card">
+      <div className="card-header">{header}</div>
+      <div className="card-body">{body}</div>
+      <div className="card-footer">{footer}</div>
+    </div>
+  );
+}
+
+// Usage:
+<Card
+  header={<h1>Title</h1>}
+  body={<p>Main content here.</p>}
+  footer={<button>Submit</button>}
+/>;
+```
+
+2. **Using children as an Object**
+
+```jsx
+function Modal({ children }) {
+  const { header, content, footer } = children;
+  return (
+    <div className="modal">
+      <div className="modal-header">{header}</div>
+      <div className="modal-content">{content}</div>
+      <div className="modal-footer">{footer}</div>
+    </div>
+  );
+}
+
+// Usage:
+<Modal>
+  {{
+    header: <h2>Welcome</h2>,
+    content: <p>This is the main part</p>,
+    footer: <button>Close</button>,
+  }}
+</Modal>;
+```
+
+3. **Composition with Static Sub-components**
+
+```jsx
+function Panel({ children }) {
+  const header = React.Children.toArray(children).find(
+    (child) => child.type === Panel.Header
+  );
+  const content = React.Children.toArray(children).find(
+    (child) => child.type === Panel.Content
+  );
+  const footer = React.Children.toArray(children).find(
+    (child) => child.type === Panel.Footer
+  );
+
+  return (
+    <div className="panel">
+      {header}
+      {content}
+      {footer}
+    </div>
+  );
+}
+
+Panel.Header = ({ children }) => <div className="panel-header">{children}</div>;
+Panel.Content = ({ children }) => (
+  <div className="panel-content">{children}</div>
+);
+Panel.Footer = ({ children }) => <div className="panel-footer">{children}</div>;
+
+// Usage:
+<Panel>
+  <Panel.Header>Header Slot</Panel.Header>
+  <Panel.Content>Main Slot</Panel.Content>
+  <Panel.Footer>Footer Slot</Panel.Footer>
+</Panel>;
+```
