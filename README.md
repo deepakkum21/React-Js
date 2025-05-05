@@ -371,3 +371,56 @@ function List() {
   ));
 }
 ```
+
+---
+
+### Forwarded Props [Proxy Props]
+
+- `pattern where a component receives props and passes (forwards) them down to a child or underlying DOM element`, often without explicitly knowing or using them itself.
+
+1. **Why**
+
+- `Reusability`:
+  - You can `build wrapper components (like buttons, inputs, modals)` that accept arbitrary props and pass them along.
+- `Custom Styling/Behavior`:
+  - Allows consumers to add custom props (like onClick, style, className, etc.) without modifying the wrapper.
+- `Better Abstraction`:
+  - Components can remain generic and flexible.
+
+2. **How to Forward Props**
+
+```jsx
+function CustomButton(props) {
+  return <button {...props} />;
+}
+
+<CustomButton onClick={handleClick} className="primary" />;
+```
+
+```jsx
+function CustomInput({ label, ...rest }) {
+  return (
+    <>
+      <label>{label}</label>
+      <input {...rest} />
+    </>
+  );
+}
+```
+
+3. ⚠️ **Limitations**
+
+- `Prop Collisions`:
+  - If the component uses a prop (e.g., className or onClick), blindly forwarding can override or duplicate it.
+- `Harder Debugging`:
+  - Overuse or careless forwarding can make components unpredictable.
+- No Type Safety (in JS):
+  - You may pass irrelevant props that aren't intended for the underlying component.
+- `React.forwardRef Needed for ref`:
+  - If you want to `forward a ref, you must explicitly use React.forwardRef`.
+
+```jsx
+const FancyInput = React.forwardRef((props, ref) => (
+  <input ref={ref} {...props} />
+));
+```
