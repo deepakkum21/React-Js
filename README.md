@@ -320,3 +320,54 @@ function getContent(role) {
 ```
 
 ---
+
+### Fragment
+
+- `used to group multiple elements without adding an extra node to the DOM`.
+- Since `return can return only one statement`, we tend to wrap with some div, but div or any other tag gets rendered to dom, but fragment doesn't.
+- `If you need to pass a key (especially in list rendering), you must use the long form`
+
+```jsx
+function App() {
+  return (
+    <h1></h1>
+    <div></div> // ❌invalid as only one statement can be returned
+  )
+}
+
+function App() {
+  return (
+    <div>
+      <h1></h1>
+      <div></div> // valid but div or any other tag gets rendered to dom
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <React.Fragment>
+      <h1></h1>
+      <div></div> // ✅ valid as fragment is not rendered
+    </React.Fragment>
+  )
+}
+
+function App() {
+  return (
+    <>
+      <h1></h1>
+      <div></div> // ✅ valid Shorthand <>...</>
+    </>
+  )
+}
+
+function List() {
+  return items.map(item => (
+    <React.Fragment key={item.id}>
+      <dt>{item.term}</dt>
+      <dd>{item.description}</dd>  // If you need to pass a key (especially in list rendering), you must use the long form
+    </React.Fragment>
+  ));
+}
+```
