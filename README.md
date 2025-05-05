@@ -209,6 +209,10 @@ function handleClick() {
 }
 ```
 
+### What's the purpose of "State" in React apps?
+
+- its the data when managed causes React to re-evaluate a component
+
 ---
 
 ### useState()
@@ -258,3 +262,5 @@ const handleClick = () => {
 state.count++; // Don't do this
 setCount((prev) => prev + 1); // correct way
 ```
+
+---
