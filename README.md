@@ -14,6 +14,10 @@ npm create vite@latest my-app --template react
 1. `Name Starts With Uppercase Character`
 2. `Returns “Renderable” Content with one return expression`
 
+### Built-in Components vs Custom Components
+
+![Built-in Components vs Custom Components](./img/Built-in%20Components%20vs%20Custom%20Components.png)
+
 ---
 
 ### props.children
