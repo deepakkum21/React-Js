@@ -264,3 +264,59 @@ setCount((prev) => prev + 1); // correct way
 ```
 
 ---
+
+### different ways to render the content in react conditionally
+
+| Method                 | Use When                      | Example Syntax                   |
+| ---------------------- | ----------------------------- | -------------------------------- |
+| `if` / `else`          | Multi-branch or verbose logic | `if (isLoggedIn) { return ... }` |
+| Ternary operator `? :` | Short inline conditional      | `{condition ? A : B}`            |
+| `&&` logical operator  | One-way condition             | `{condition && A}`               |
+| `switch`               | Multiple specific values      | `switch (value) { ... }`         |
+| IIFE                   | Inline but with complex logic | `{(() => { ... })()}`            |
+| Optional chaining      | Safe access to nested props   | `{user?.name}`                   |
+
+```jsx
+// if Statements (inside function)
+function MyComponent({ isLoggedIn }) {
+  if (isLoggedIn) {
+    return <h1>Welcome back!</h1>;
+  } else {
+    return <h1>Please sign in.</h1>;
+  }
+}
+
+// Ternary Operator
+<p>{isLoggedIn ? "Logout" : "Login"}</p>
+{isAdmin ? <AdminPanel /> : <UserPanel />}
+
+// Logical AND (&&) Operator
+{isLoading && <p>Loading...</p>}
+
+// Switch Statements
+function getContent(role) {
+  switch (role) {
+    case "admin":
+      return <AdminDashboard />;
+    case "user":
+      return <UserDashboard />;
+    default:
+      return <GuestView />;
+  }
+}
+
+// Immediately Invoked Function Expressions (IIFE)
+{(() => {
+  if (error) return <ErrorMessage />;
+  if (loading) return <Spinner />;
+  return <DataView />;
+})()}
+
+// Conditional Classes or Styles
+<div className={isDark ? "dark-mode" : "light-mode"}></div>
+
+// Using Optional Chaining
+<p>{user?.name}</p>
+```
+
+---
