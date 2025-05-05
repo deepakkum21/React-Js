@@ -424,3 +424,24 @@ const FancyInput = React.forwardRef((props, ref) => (
   <input ref={ref} {...props} />
 ));
 ```
+
+```jsx
+// example
+function App() {
+  return (
+    <div id="content">
+      <Input type="text" placeholder="Your name" />
+      <Input richText placeholder="Your message" />
+    </div>
+  );
+}
+
+export default function Input({ richText, ...props }) {
+  let content = <textarea {...props} />;
+
+  if (richText) {
+    content = <input {...props} />;
+  }
+  return <>{content}</>;
+}
+```
