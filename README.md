@@ -222,6 +222,8 @@ function handleClick() {
 }
 ```
 
+## ![hook-rules](./img/hooks-rules.png)
+
 ### What's the purpose of "State" in React apps?
 
 - its the data when managed causes React to re-evaluate a component
