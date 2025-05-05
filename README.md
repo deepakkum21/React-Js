@@ -93,3 +93,60 @@ function Child(props) {
   return <button onClick={props.onButtonClick}>Click Me</button>;
 }
 ```
+
+### Passing Event Handler with Parameters
+
+```jsx
+function Parent() {
+  function handleItemClick(itemId) {
+    alert(`Item clicked: ${itemId}`);
+  }
+
+  return (
+    <div>
+      <Child onItemClick={() => handleItemClick(1)} />
+    </div>
+  );
+}
+```
+
+```jsx
+function Child(props) {
+  return (
+    <div>
+      <button onClick={onItemClick}>Item 1</button>
+    </div>
+  );
+}
+```
+
+---
+
+### When you try to update the UI in React without using state
+
+1. `You change a variable directly — but React doesn't re-render`
+
+```jsx
+let counter = 0;
+
+function Counter() {
+  function handleClick() {
+    counter++; // Update variable
+    console.log(counter); // Logs updated value
+  }
+
+  return (
+    <>
+      <p>Counter: {counter}</p>
+      <button onClick={handleClick}>Increment</button>
+    </>
+  );
+}
+```
+
+- What happens?
+  - Clicking the button changes the counter variable.
+  - But the UI doesn't update because `React doesn't know it needs to re-render`.
+- Why?
+  - `React only re-renders when state (via useState) or props change.`
+  - `Changing regular variables doesn't trigger a re-render.`
