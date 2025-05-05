@@ -208,3 +208,53 @@ function handleClick() {
   useState(); // ❌ Invalid inside event handlers
 }
 ```
+
+---
+
+### useState()
+
+- `lets you add state to functional components`
+
+```jsx
+const [state, setState] = useState(initialValue);
+
+// state: current state value
+// setState: function to update the state
+// initialValue: value used for the first render
+
+const [count, setCount] = useState(0);
+<button onClick={() => setCount(count + 1)}>Increment</button>;
+```
+
+### Why We See the Old Value in console.log After setState()
+
+```jsx
+const [count, setCount] = useState(0);
+
+const handleClick = () => {
+  setCount(count + 1);
+  console.log(count); // 🛑 Logs OLD value!
+};
+```
+
+`❓ Why?`
+
+- setState() in React is `asynchronous`. That means:
+- `It schedules an update`.
+- The `actual state change (and re-render) happens after the function exits`.
+- So in the console.log(count), you're logging the value before React has updated it.
+
+| Concept                                | Explanation                                                  |
+| -------------------------------------- | ------------------------------------------------------------ |
+| **State is preserved across renders**  | React keeps the state between function calls                 |
+| **State updates cause re-renders**     | Updating state tells React to re-render the component        |
+| **State updates are async**            | You won’t see changes immediately after `setState()`         |
+| **You must not mutate state directly** | Always use `setState` to update it                           |
+| **Can be used multiple times**         | You can have multiple `useState` hooks in a single component |
+
+❌ Mutating state directly
+
+```jsx
+state.count++; // Don't do this
+setCount((prev) => prev + 1); // correct way
+```
