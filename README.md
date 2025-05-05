@@ -18,6 +18,10 @@ npm create vite@latest my-app --template react
 
 ![Built-in Components vs Custom Components](./img/Built-in%20Components%20vs%20Custom%20Components.png)
 
+### Props Accept All Value Types
+
+![Props Accept All Value Types](./img/Props%20Accept%20All%20Value%20Types.png)
+
 ---
 
 ### props.children
