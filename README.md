@@ -280,6 +280,32 @@ setCount((prev) => prev + 1); // correct way
 
 ---
 
+## Scheduling State Updates
+
+![Scheduling State Updates](./img/Scheduling%20State%20Updates.png)
+
+```jsx
+const [isEditing, setIsEditing] = React.useState(false);
+
+function handleEditClick() {
+  setIsEditing(!isEditing);
+  setIsEditing(!isEditing);
+
+  // we think with the above two lines we will get last value as false so nothing will change
+  // but its not because if REACT STATE ARE SCHEDULED
+}
+
+function handleEditClick() {
+  setIsEditing((editing) => !editing);
+  setIsEditing((editing) => !editing);
+  // here nothing will change and last value will be false
+  // as both statement nullify
+  // because here value is being changed based on prev value, here REACT STATE ARE SCHEDULED
+}
+```
+
+---
+
 ### different ways to render the content in react conditionally
 
 | Method                 | Use When                      | Example Syntax                   |
