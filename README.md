@@ -928,6 +928,7 @@ const App = () => {
 
 - It does `not render anything` to the UI, but it `activates extra checks and warnings for its descendants`
 - `can be wrapped around any component`, best to wrap at App level
+- In `React 18+, StrictMode will intentionally run certain functions (e.g., useEffect, constructor) twice` to detect bugs.
 
 ```jsx
 ReactDOM.createRoot(document.getElementById('root')).render(
