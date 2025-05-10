@@ -921,3 +921,26 @@ const App = () => {
   );
 };
 ```
+
+---
+
+## React.StrictMode
+
+- It does `not render anything` to the UI, but it `activates extra checks and warnings for its descendants`
+- `can be wrapped around any component`, best to wrap at App level
+
+```jsx
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+```
+
+| Feature                                  | Description                                                                  |
+| ---------------------------------------- | ---------------------------------------------------------------------------- |
+| ✅ **Detects unsafe lifecycles**         | Warns about deprecated lifecycle methods in class components                 |
+| ✅ **Warns about legacy API usage**      | Helps identify deprecated context or string refs                             |
+| ✅ **Checks for side effects**           | Intentionally **double-invokes** some functions like `useEffect` in dev mode |
+| ✅ **Detects unexpected keys**           | Catches issues in `lists` that don’t use stable keys                         |
+| ✅ **Detects duplicate state mutations** | Helps avoid unintended state updates during re-renders                       |
