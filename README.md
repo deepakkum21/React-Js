@@ -1015,6 +1015,12 @@ export default App = () => {
 
 - When the top-level state changes, `it causes re-renders all the way down the tree, even in components that don’t care about the updated data`.
 
+4. Alternatives
+
+- React Context API – Good for global state or themes, but overuse can lead to performance issues.
+- State Management Libraries (e.g., Redux, Zustand, Jotai) – Better for complex state.
+- Component Composition / Render Props / Hooks – Cleaner and more flexible in some scenarios.
+
 ---
 
 ## Use() Vs useContext()
@@ -1031,3 +1037,5 @@ if (someCondition) {
   const useCtx = useContext(); // ❌ not valid
 }
 ```
+
+---
