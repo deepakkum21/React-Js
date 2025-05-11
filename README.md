@@ -1027,6 +1027,7 @@ export default App = () => {
 
 - both can be used for Drilling down state
 - `use() can be used inside if condition`
+- use() in React19+
 
 ```jsx
 if (someCondition) {
