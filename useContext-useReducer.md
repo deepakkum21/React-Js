@@ -116,3 +116,93 @@ function App() {
 
 export default App;
 ```
+
+---
+
+## useReducer()
+
+- `React Hook used as an alternative to useState for managing more complex state logic`
+
+```jsx
+const [state, dispatch] = useReducer(reducerFunction, initialState);
+// state: Current state value
+// dispatch: Function used to send an action to the reducer
+// reducer: Function that receives (state, action) and returns the new state
+// initialState: The initial state value
+```
+
+```jsx
+const initialForm = {
+  name: '',
+  email: '',
+  subscribed: false,
+};
+
+function formReducer(state, action) {
+  switch (action.type) {
+    case 'UPDATE_FIELD':
+      return { ...state, [action.field]: action.value };
+    case 'TOGGLE_SUBSCRIBE':
+      return { ...state, subscribed: !state.subscribed };
+    case 'RESET':
+      return initialForm;
+    default:
+      return state;
+  }
+}
+
+function Form() {
+  const [formState, dispatch] = useReducer(formReducer, initialForm);
+
+  return (
+    <form>
+      <input
+        type="text"
+        placeholder="Name"
+        value={formState.name}
+        onChange={(e) =>
+          dispatch({
+            type: 'UPDATE_FIELD',
+            field: 'name',
+            value: e.target.value,
+          })
+        }
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        value={formState.email}
+        onChange={(e) =>
+          dispatch({
+            type: 'UPDATE_FIELD',
+            field: 'email',
+            value: e.target.value,
+          })
+        }
+      />
+      <label>
+        <input
+          type="checkbox"
+          checked={formState.subscribed}
+          onChange={() => dispatch({ type: 'TOGGLE_SUBSCRIBE' })}
+        />
+        Subscribe
+      </label>
+      <button type="button" onClick={() => dispatch({ type: 'RESET' })}>
+        Reset
+      </button>
+    </form>
+  );
+}
+```
+
+### When to Use useReducer Instead of useState
+
+| Use `useState` when...                        | Use `useReducer` when...                          |
+| --------------------------------------------- | ------------------------------------------------- |
+| State logic is simple                         | State logic is complex or involves many variables |
+| State updates are independent                 | Updates depend on previous state or actions       |
+| Minimal state transitions                     | You want a Redux-like pattern                     |
+| You don’t need to group logic in one function | You want all logic centralized in a reducer       |
+
+---
