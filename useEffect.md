@@ -7,6 +7,9 @@
   - Manually modifying the DOM
   - Setting up subscriptions or timers
   - Logging
+- **Cleanup code runs**
+  - `component unmount`
+  - `before again dame useEffect runs`
 
 ```jsx
 useEffect(() => {
