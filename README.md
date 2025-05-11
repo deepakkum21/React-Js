@@ -1014,3 +1014,20 @@ export default App = () => {
 3. **Performance Issues**
 
 - When the top-level state changes, `it causes re-renders all the way down the tree, even in components that don’t care about the updated data`.
+
+---
+
+## Use() Vs useContext()
+
+- both can be used for Drilling down state
+- `use() can be used inside if condition`
+
+```jsx
+if (someCondition) {
+  const useCtx = use(); // ✅ valid
+}
+
+if (someCondition) {
+  const useCtx = useContext(); // ❌ not valid
+}
+```
