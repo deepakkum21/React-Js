@@ -278,6 +278,34 @@ state.count++; // Don't do this
 setCount((prev) => prev + 1); // correct way
 ```
 
+### How useState Batching Works
+
+1. By default, React `batches state updates during event handlers` and lifecycle methods.
+2. This means `multiple useState calls inside the same event will only trigger one re-render`.
+
+```jsx
+function Counter() {
+  const [count, setCount] = useState(0);
+  const [text, setText] = useState('');
+
+  const handleClick = () => {
+    setCount((prev) => prev + 1);
+    setText('Updated');
+    // ✅ React batches both updates → 1 re-render
+  };
+
+  return (
+    <>
+      <button onClick={handleClick}>Update</button>
+      <div>
+        {count} - {text}
+      </div>
+    </>
+  );
+}
+// Even though we call two setState functions, React batches them and triggers one re-render.
+```
+
 ---
 
 ## Scheduling State Updates
