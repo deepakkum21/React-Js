@@ -998,3 +998,19 @@ export default App = () => {
   );
 };
 ```
+
+---
+
+## Problems with Props drilling
+
+1. **Reduced Reusability**
+
+- Components that are meant to be `generic now have to know about and accept props that aren’t relevant to them`, reducing modularity and reusability.
+
+2. **Code Becomes Harder to Maintain**
+
+- As your component tree grows, `passing props through many layers clutters your code and makes it harder to understand.`
+
+3. **Performance Issues**
+
+- When the top-level state changes, `it causes re-renders all the way down the tree, even in components that don’t care about the updated data`.
