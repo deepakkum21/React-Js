@@ -10,6 +10,12 @@
 
 ---
 
+## Improve performance
+
+`use millionjs` which replaces virtual-dom with its owm way
+
+---
+
 # React Vs Angular
 
 | Feature              | **React**                       | **Angular**                        |
