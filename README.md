@@ -1001,3 +1001,10 @@ export default App = () => {
 
 ---
 
+## React inbuilt HOC
+
+| HOC                | Purpose                           |
+| ------------------ | --------------------------------- |
+| `React.memo`       | Prevents re-renders on same props |
+| `React.forwardRef` | Passes refs to child components   |
+| `React.lazy`       | Dynamically loads components      |
