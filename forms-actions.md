@@ -83,3 +83,82 @@ export default function TodoForm() {
   );
 }
 ```
+
+---
+
+## useFormStatus()
+
+### ✅ Purpose
+
+- Know `if a form is currently submitting`.
+- `Show loading indicators, disable buttons`, or handle optimistic UI easily.
+
+### Where Can It Be Used?
+
+- useFormStatus() is designed to `work inside a child component of a <form> that uses a Server Action`.
+- It only works within `the same React tree as the form` using Server Actions (e.g., inside the submit button or feedback messages).
+
+```jsx
+const { pending, data, method, action } = useFormStatus();
+```
+
+| Property  | Type       | Description                              |
+| --------- | ---------- | ---------------------------------------- |
+| `pending` | `boolean`  | Whether the form is currently submitting |
+| `data`    | `FormData` | The submitted form data (if available)   |
+| `method`  | `string`   | HTTP method (typically "POST")           |
+| `action`  | `string`   | URL or function used for the form action |
+
+```jsx
+// app/actions.js
+
+export async function submitMessage(formData) {
+  const message = formData.get('message');
+  console.log('Received:', message);
+  // Simulate saving message...
+}
+```
+
+```jsx
+// app/components/SubmitButton.tsx
+
+import { useFormStatus } from 'react-dom';
+
+export default function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button type="submit" disabled={pending}>
+      {pending ? 'Sending...' : 'Send Message'}
+    </button>
+  );
+}
+```
+
+```jsx
+import { submitMessage } from './actions';
+import SubmitButton from './components/SubmitButton';
+
+export default function Page() {
+  return (
+    <form action={submitMessage}>
+      <input type="text" name="message" placeholder="Your message" required />
+      <SubmitButton />
+    </form>
+  );
+}
+```
+
+### Common Use Cases
+
+- `Disable submit button while form is submitting`.
+- `Show loading spinners`.
+- Display optimistic UI changes.
+- Improve form UX with minimal code.
+
+| Feature    | `useActionState()`                       | `useFormStatus()`                             |
+| ---------- | ---------------------------------------- | --------------------------------------------- |
+| Type       | Full hook to manage server action state  | Lightweight hook for form status              |
+| Returns    | \[state, actionFn, pending]              | { pending, data, method, action }             |
+| Use Case   | Manage form result and server-side state | Track submission state inside form components |
+| Common Use | Main form component                      | Submit buttons, loading indicators            |
