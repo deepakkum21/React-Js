@@ -324,6 +324,8 @@ function handleReset(event) {
 
 ## Validations
 
+- `should use combination of built-in browser forms validation with custom`
+
 1. **form-validation-keystroke-blur**
 
 - `using stateful`
@@ -462,4 +464,41 @@ export default function Login() {
     </form>
   );
 }
+```
+
+3. Browser built in validations
+
+- required
+- minLength
+- maxLength
+- pattern
+
+```html
+<div className="control">
+  <label htmlFor="email">Email</label>
+  <input id="email" type="email" name="email" required />
+</div>
+
+<div className="control-row">
+  <div className="control">
+    <label htmlFor="password">Password</label>
+    <input
+      id="password"
+      type="password"
+      name="password"
+      required
+      minlength="{6}"
+    />
+  </div>
+
+  <div className="control">
+    <label htmlFor="confirm-password">Confirm Password</label>
+    <input
+      id="confirm-password"
+      type="password"
+      name="confirm-password"
+      required
+    />
+  </div>
+</div>
 ```
