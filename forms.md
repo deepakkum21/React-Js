@@ -27,7 +27,7 @@
    - instead of adding onClick on button `add the same handler to submit attribute of form tag` and `also call preventDefault() inside the submitHandler`
 
 ```jsx
-<form submit={handleSubmit}>
+<form onSubmit={handleSubmit}>
   <label htmlFor="name"> Name </label>
   <input id="name" name="userName" />
   <button>Submit</button>
@@ -40,4 +40,59 @@ function handleSubmit(event) {
 
 ## Ways to accept input data from forms
 
-1. \*\*from
+1. **form input data using generic handlers**
+
+- `using useState`
+
+```jsx
+const [enteredValues, setEnteredValues] = useState({
+  email: '',
+  password: '',
+});
+
+function handleSubmit(event) {
+  event.preventDefault();
+
+  console.log(enteredValues);
+}
+
+function handleInputChange(identifier, value) {
+  setEnteredValues((prevValues) => ({
+    ...prevValues,
+    [identifier]: value,
+  }));
+}
+
+<form onSubmit={handleSubmit}>
+  <h2>Login</h2>
+
+  <div className="control-row">
+    <div className="control no-margin">
+      <label htmlFor="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        name="email"
+        onChange={(event) => handleInputChange('email', event.target.value)}
+        value={enteredValues.email}
+      />
+    </div>
+
+    <div className="control no-margin">
+      <label htmlFor="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        name="password"
+        onChange={(event) => handleInputChange('password', event.target.value)}
+        value={enteredValues.password}
+      />
+    </div>
+  </div>
+
+  <p className="form-actions">
+    <button className="button button-flat">Reset</button>
+    <button className="button">Login</button>
+  </p>
+</form>;
+```
