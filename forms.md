@@ -256,3 +256,66 @@ export default function Signup() {
   );
 }
 ```
+
+---
+
+## Reset the form Data
+
+1. **use button type="reset" of form tag**
+   - `<button type="reset" className="button button-flat">Reset</button>`
+
+```jsx
+<form onSubmit={handleSubmit}>
+  <h2>Login</h2>
+
+  <div className="control-row">
+    <div className="control no-margin">
+      <label htmlFor="email">Email</label>
+      <input id="email" type="email" name="email" ref={email} />
+    </div>
+
+    <div className="control no-margin">
+      <label htmlFor="password">Password</label>
+      <input id="password" type="password" name="password" ref={password} />
+    </div>
+  </div>
+
+  <p className="form-actions">
+    <button type="reset" className="button button-flat">
+      Reset
+    </button>
+    <button className="button">Login</button>
+  </p>
+</form>
+```
+
+2. `use event.target.reset()`
+
+```jsx
+<form onSubmit={handleSubmit}>
+  <h2>Login</h2>
+
+  <div className="control-row">
+    <div className="control no-margin">
+      <label htmlFor="email">Email</label>
+      <input id="email" type="email" name="email" ref={email} />
+    </div>
+
+    <div className="control no-margin">
+      <label htmlFor="password">Password</label>
+      <input id="password" type="password" name="password" ref={password} />
+    </div>
+  </div>
+
+  <p className="form-actions">
+    <button className="button button-flat" onClick={handleReset}>
+      Reset
+    </button>
+    <button className="button">Login</button>
+  </p>
+</form>;
+
+function handleReset(event) {
+  event.target.reset();
+}
+```
