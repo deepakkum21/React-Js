@@ -221,3 +221,83 @@ export default function ItemForm() {
 - If you're using `useFormStatus() inside buttons, each button will track its own pending state`.
 
 ---
+
+## useOptimistic()
+
+- Optimistic UI is `when you pretend the server has already responded positively and update the UI immediately, then roll back if the server fails.`
+
+```jsx
+const [optimisticState, addOptimistic] = useOptimistic(currentState, updateFn);
+```
+
+**Parameters**:
+
+- `currentState`: The actual state (e.g. from the server).
+- `updateFn`: A function to compute the next optimistic state based on previous state and user input.
+  - 1st param is previousState,
+  - other param can be what is passed by addOptimistic fnc
+
+**Returns**:
+
+- `optimisticState`: What to render optimistically.
+- `addOptimistic`: A function to trigger optimistic updates (often from a formAction).
+
+```jsx
+// app/action.js
+export async function addComment(prevState, formData) {
+  const comment = formData.get('comment');
+  // Simulate server-side DB logic here...
+  return { success: true, comment };
+}
+```
+
+```jsx
+//
+
+import { useOptimistic, useState } from 'react';
+import { addComment } from './actions';
+
+export default function CommentForm() {
+  const [comments, setComments] = useState<string[]>([]);
+  const [optimisticComments, addOptimisticComment] = useOptimistic(
+    comments,
+    (prev, newComment: string) => [...prev, newComment]
+  );
+
+  async function formAction(prevState: any, formData: FormData) {
+    const newComment = formData.get('comment') as string;
+    addOptimisticComment(newComment); // Show optimistic update
+
+    const result = await addComment(prevState, formData);
+    if (result.success) {
+      setComments(prev => [...prev, newComment]);
+    }
+  }
+
+  return (
+    <form action={formAction}>
+      <input name="comment" placeholder="Write a comment..." required />
+      <button type="submit">Post</button>
+
+      <ul>
+        {optimisticComments.map((c, i) => (
+          <li key={i}>{c}</li>
+        ))}
+      </ul>
+    </form>
+  );
+}
+```
+
+| Benefit                   | Description                                                 |
+| ------------------------- | ----------------------------------------------------------- |
+| Fast perceived UX         | UI updates instantly, even before server responds           |
+| Declarative & simple      | Keeps logic localized and easy to understand                |
+| Works with server actions | Designed to pair with `useActionState()` and server actions |
+| Revert on failure         | You can roll back easily if the action fails                |
+
+| Feature             | `useState()`          | `useOptimistic()`                         |
+| ------------------- | --------------------- | ----------------------------------------- |
+| UI reacts to server | After response        | Before response (optimistically)          |
+| Revert on failure   | Manual                | Easier with separation of true state      |
+| Intended for        | Regular state updates | Server Action forms and async UI feedback |
