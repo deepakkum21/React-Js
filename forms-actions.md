@@ -162,3 +162,62 @@ export default function Page() {
 | Returns    | \[state, actionFn, pending]              | { pending, data, method, action }             |
 | Use Case   | Manage form result and server-side state | Track submission state inside form components |
 | Common Use | Main form component                      | Submit buttons, loading indicators            |
+
+---
+
+## Registering multiple formAction | One Form, Multiple Submit Buttons with formAction
+
+```jsx
+<form>
+  <input name="itemId" defaultValue="123" hidden />
+
+  <button formAction={deleteItem}>Delete</button>
+  <button formAction={updateItem}>Update</button>
+</form>
+```
+
+**How it works:**
+
+- The `<form> tag has no action, so buttons define it`.
+- `Each button can define a different formAction` server function.
+- React determines which formAction was used based on the clicked button.
+
+```jsx
+// action.js
+
+export async function deleteItem(formData) {
+  const id = formData.get('itemId');
+  console.log('Deleting', id);
+}
+
+export async function updateItem(formData) {
+  const id = formData.get('itemId');
+  const name = formData.get('name');
+  console.log('Updating', id, 'with name:', name);
+}
+```
+
+```jsx
+// formComponent
+
+import { deleteItem, updateItem } from './actions';
+
+export default function ItemForm() {
+  return (
+    <form>
+      <input type="hidden" name="itemId" value="123" />
+      <input type="text" name="name" placeholder="New name" />
+
+      <button formAction={deleteItem}>Delete</button>
+      <button formAction={updateItem}>Update</button>
+    </form>
+  );
+}
+```
+
+### Notes
+
+- formAction `only works on <button>, not on <input type="submit">`.
+- If you're using `useFormStatus() inside buttons, each button will track its own pending state`.
+
+---
