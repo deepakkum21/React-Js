@@ -164,6 +164,8 @@ const counterReducer = (state = initialState, action) = {
     }
     return state;
 }
+
+const store = createStore(counterReducer);
 ```
 
 ```jsx
@@ -482,3 +484,5 @@ dispatch({ type: 'INCREMENT' }); // simple action
 dispatch(fetchData()); // fetchData returns a function, not an object
 // Redux Thunk intercepts this and invokes the function, passing dispatch.
 ```
+
+## 3. using redux-toolkit - createAsyncThunk
