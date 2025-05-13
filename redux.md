@@ -240,6 +240,7 @@ const slice = createSlice({
     // Reducer logic (mutating is allowed via Immer)
     someAction: (state, action) => {
       /* update state */
+      // for any payload `action.payload`
     },
   },
 });
