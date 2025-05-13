@@ -116,3 +116,99 @@ const selectedState = useSelector(selectorFn);
 - `Avoid selecting the entire state like useSelector(state => state) — this causes re-renders on any state change`.
 - You can use shallow comparison or useMemo to optimize performance if you're selecting objects or arrays.
 - Each useSelector() is independent, so you can use multiple calls if needed.
+
+---
+
+## useDispatch()
+
+- To `send actions to the Redux store to update state`.
+- It's the hook-based `alternative to mapDispatchToProps from connect()` in class components
+
+```jsx
+const dispatch = useDispatch();
+
+dispatch({ type: 'ACTION_TYPE', payload: data });
+```
+
+---
+
+```jsx
+// store.js
+const initialState = {
+    counter: 0
+}
+
+const counterReducer = (state = initialState, action) = {
+    if(action.type === 'increment') {
+        return {
+            ...state,
+            counter = state.counter + 1
+        }
+    }
+    if(action.type === 'decrement') {
+        return {
+            ...state,
+            counter = state.counter + 1
+        }
+    }
+    if(action.type === 'increase') {
+        return {
+            ...state,
+            counter = state.counter + state.value
+        }
+    }
+    return state;
+}
+```
+
+```jsx
+// Counter.js
+import { useSelector, useDispatch } from 'react-redux';
+
+function Counter() {
+  const count = useSelector((state) => state.counter.value);
+  const dispatch = useDispatch();
+
+  const handleIncrement() {
+    dispatch({
+        type: 'increment'
+    })
+  }
+
+  const handleDecrement() {
+    dispatch({
+        type: 'decrement'
+    })
+  }
+
+  const handleIncrementBy5() {
+    dispatch({
+        type: 'increase',
+        value: 5
+    })
+  }
+
+  return (
+    <div>
+      <h2>Count: {count}</h2>
+      <button onClick={handleIncrement}>+ Increment</button>
+      <button onClick={handleDecrement}>− Decrement</button>
+      <button onClick={handleIncrementBy5}>Increase By 5</button>
+    </div>
+  );
+}
+```
+
+```jsx
+import { Provider } from 'react-redux';
+import { store } from './store';
+import Counter from './Counter';
+
+function App() {
+  return (
+    <Provider store={store}>
+      <Counter />
+    </Provider>
+  );
+}
+```
