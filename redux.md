@@ -375,7 +375,7 @@ function Root() {
 
 ![fat Reducer Vs Fat Component Vs Fat Actions](./img/fatReducerVsFatComponentVsFatActions.png)
 
-### 1. Async via useEffect() in component
+## 1. Async via useEffect() in component
 
 - adding the useEffect() in conjunction with useDispatch()
 - since one `should not call side effects inside the reducer`, `reducer should be pure and sync`
@@ -449,4 +449,36 @@ function App() {
     </Fragment>
   );
 }
+```
+
+## 2. Redux Thunk [Action creator]
+
+- thunk is an `action creator that returns a function instead of an action object`.
+- `Redux will call this function with dispatch` (and optionally getState), allowing you to:
+  - `Make API calls`
+  - `Dispatch multiple actions`
+  - `Handle async flows` like loading/error states
+
+```jsx
+// syntax
+const fetchData = () => {
+  return async (dispatch, getState) => {
+    dispatch({ type: 'FETCH_START' });
+
+    try {
+      const response = await fetch('/api/data');
+      const data = await response.json();
+      dispatch({ type: 'FETCH_SUCCESS', payload: data });
+    } catch (error) {
+      dispatch({ type: 'FETCH_ERROR', error });
+    }
+  };
+};
+
+// Normally
+dispatch({ type: 'INCREMENT' }); // simple action
+
+//With thunk:
+dispatch(fetchData()); // fetchData returns a function, not an object
+// Redux Thunk intercepts this and invokes the function, passing dispatch.
 ```
