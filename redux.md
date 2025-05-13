@@ -88,15 +88,26 @@ store.dispatch('decrement');
 
 ---
 
-1. **react-redux**
+1. **redux**
+   - `createStore`
+   - `combineReducer`
+2. **react-redux**
    - `Provider`
    - `useSelector`
    - `useDispatch`
-2. **redux-toolkit [@reduxjs/toolkit]**
+3. **redux-toolkit [@reduxjs/toolkit]**
    - `configureStore`
    - `createSlice`
 
 ---
+
+## createStore
+
+## combineReducer
+
+## middleware
+
+## https://www.youtube.com/watch?v=sziLH_2EiME&list=PLfEr2kn3s-br2OoBNSR7S5eJ-kcEeUQcG&index=5
 
 ## useSelector()
 
