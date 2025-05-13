@@ -368,3 +368,9 @@ function Root() {
 | Needs Redux DevTools extension   | Built-in support                      |
 
 ---
+
+## Async/Side effects with Redux
+
+![Async/Side effects with Redux](./img/redux-async-sideEffects.png)
+
+![fat Reducer Vs Fat Component Vs Fat Actions](./img/fatReducerVsFatComponentVsFatActions.png)
