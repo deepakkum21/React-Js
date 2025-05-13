@@ -16,3 +16,13 @@
 ## Redux core
 
 ![Redux Core](./img/redux-core.png)
+
+## Reducer func
+
+- will be executed when action is dispatched
+- always has two param
+  - `oldState`
+  - `dispatchedActions`
+- it is accepted as a param by `createStore(reducer)`
+
+![Reducer](./img/redux-reducer.png)
