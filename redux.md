@@ -68,3 +68,51 @@ store.dispatch('decrement');
 // counter: 1
 // counter: 0
 ```
+
+---
+
+## React REdux [lib]
+
+- `redux`
+- `react-redux`
+  - gives `<Provider></Provider>` component which will wrap the app which needs teh store access just like contextProvider using `useContext`
+- redux-toolkit
+  - `configureStore`
+  - `createSlice`
+
+```jsx
+<Provider store={storeCreatedUsingRedux}>
+  <App />
+</Provider>
+```
+
+---
+
+1. **react-redux**
+   - `Provider`
+   - `useSelector`
+   - `useDispatch`
+2. **redux-toolkit**
+   - `configureStore`
+   - `createSlice`
+
+---
+
+## useSelector()
+
+- To `select a piece of state from the Redux store`.
+- To `re-render the component only when that slice of state changes`.
+- `Replaces mapStateToProps from the HOC connect()` API.
+- it `internally creates a subscription with store` which is required.
+
+```js
+const selectedState = useSelector(selectorFn);
+
+//selectorFn: A function that takes the entire Redux store state and returns a slice of it.
+```
+
+### ⚠️ Important Notes
+
+- `Avoid selecting the entire state like useSelector(state => state) — this causes re-renders on any state change`.
+- You can use shallow comparison or useMemo to optimize performance if you're selecting objects or arrays.
+- Each useSelector() is independent, so you can use multiple calls if needed.
