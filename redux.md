@@ -497,3 +497,143 @@ dispatch(fetchData()); // fetchData returns a function, not an object
 ```
 
 ## 3. using redux-toolkit - createAsyncThunk
+
+- a utility from Redux Toolkit used for h`andling asynchronous logic (like API calls) in Redux applications`.
+- It simplifies the process of `dispatching lifecycle actions (pending, fulfilled, rejected) and reduces boilerplate`.
+
+```jsx
+// syntax
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
+const fetchData = createAsyncThunk(
+  'data/fetchData', // action type string
+  async (arg, thunkAPI) => {
+    const response = await fetch('https://api.example.com/data');
+    return response.json(); // resolved value goes into action.payload
+  }
+);
+```
+
+**Parameters**
+
+- a string action type value, example
+  - 'users/requestStatus'
+  - 'data/fetchData'
+- a payloadCreator callback / A callback function that should return a promise containing the result of some asynchronous logic, arguments are
+  - `arg`:- a value / Object for the API [id, requestBody]
+  - `thunkApi`:-
+    - dispatch
+    - getState
+    - rejectWithValue – for custom error handling
+    - signal – to handle request cancellation
+- an options object.
+
+**Action Lifecycle**
+When you dispatch fetchData(), Redux Toolkit automatically creates and dispatches:
+
+- `fetchData.pending` – when the async function starts
+- `fetchData.fulfilled` – if it resolves successfully
+- `fetchData.rejected` – if it throws an error
+
+```jsx
+// example
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
+export const fetchUserById = createAsyncThunk(
+  'users/fetchUserById',
+  async ({ userId, token }, thunkAPI) => {
+    try {
+      const response = await fetch(`https://api.example.com/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) throw new Error('Failed to fetch user');
+      return await response.json();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+```
+
+```jsx
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchUserById } from './userThunks'; // assume this is where you define the thunk
+
+const userSlice = createSlice({
+  name: 'user',
+  initialState: {
+    user: null,
+    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+    error: null,
+  },
+  reducers: {
+    // add other non-async reducers here if needed
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUserById.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(fetchUserById.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.user = action.payload;
+      })
+      .addCase(fetchUserById.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload || action.error.message;
+      });
+  },
+});
+
+export default userSlice.reducer;
+```
+
+```jsx
+// sample for multiple extraReducers
+const dataSlice = createSlice({
+  name: 'data',
+  initialState: {
+    users: [],
+    posts: [],
+    loadingUsers: false,
+    loadingPosts: false,
+    errorUsers: null,
+    errorPosts: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    // Handle fetchUsers
+    builder
+      .addCase(fetchUsers.pending, (state) => {
+        state.loadingUsers = true;
+        state.errorUsers = null;
+      })
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.loadingUsers = false;
+        state.users = action.payload;
+      })
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.loadingUsers = false;
+        state.errorUsers = action.error.message;
+      });
+
+    // Handle fetchPosts
+    builder
+      .addCase(fetchPosts.pending, (state) => {
+        state.loadingPosts = true;
+        state.errorPosts = null;
+      })
+      .addCase(fetchPosts.fulfilled, (state, action) => {
+        state.loadingPosts = false;
+        state.posts = action.payload;
+      })
+      .addCase(fetchPosts.rejected, (state, action) => {
+        state.loadingPosts = false;
+        state.errorPosts = action.error.message;
+      });
+  },
+});
+```
