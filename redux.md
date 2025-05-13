@@ -347,6 +347,20 @@ function Counter() {
 }
 ```
 
+```jsx
+import { Provider } from 'react-redux';
+import { store } from './store';
+import App from './App';
+
+function Root() {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+}
+```
+
 | Traditional Redux                | Redux Toolkit with `configureStore()` |
 | -------------------------------- | ------------------------------------- |
 | Manual `createStore`, middleware | Automatic setup with smart defaults   |
