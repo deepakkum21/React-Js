@@ -251,8 +251,119 @@ export default slice.reducer; // return Reducer
 ### 🧠 Under the Hood
 
 - createSlice() `uses Immer, so you can "mutate" the state safely (it’s still immutable behind the scenes)`.
-- Returns:
+- **Returns**:
   - A reducer function for use in configureStore()
     - `const { someAction } = slice.actions`
   - Auto-generated action creators
     - `const reducer = slice.reducer`
+
+## 2. configureStore
+
+- It wraps around createStore from plain Redux and automatically:
+  - `Combines reducers`
+  - `Adds useful middleware` (redux-thunk, devtools, etc.)
+  - Enables Redux DevTools
+  - Adds good default settings for development
+
+```jsx
+// Syntax
+import { configureStore } from '@reduxjs/toolkit';
+
+const store = configureStore({
+  reducer: {
+    sliceName: sliceReducer,
+    // more reducers...
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(customMiddleware),
+  devTools: true, // enabled by default in development
+});
+
+| Option           | Purpose                                                    |
+| ---------------- | ---------------------------------------------------------- |
+| `reducer`        | Root reducer (object of slices or single reducer function) |
+| `middleware`     | Add or customize Redux middleware stack                    |
+| `devTools`       | Enable/disable Redux DevTools                              |
+| `preloadedState` | Initialize store with predefined state                     |
+| `enhancers`      | Add store enhancers like `applyMiddleware` (rarely needed) |
+
+```
+
+### example uf configureStore & createSlice
+
+```jsx
+// 1. Create Slice (counterSlice.js)
+import { createSlice } from '@reduxjs/toolkit';
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: { value: 0 },
+  reducers: {
+    increment: (state) => {
+      state.value += 1;
+    },
+    decrement: (state) => {
+      state.value -= 1;
+    },
+    incrementByAmount: (state, action) => {
+      state.value += action.payload;
+    },
+  },
+});
+
+export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export default counterSlice.reducer;
+```
+
+```jsx
+// 2. Configure Store (store.js)
+import { configureStore } from '@reduxjs/toolkit';
+import counterReducer from './counterSlice';
+
+export const store = configureStore({
+  reducer: {
+    counter: counterReducer,
+  },
+});
+```
+
+```jsx
+import { useSelector, useDispatch } from 'react-redux';
+import { increment, decrement, incrementByAmount } from './counterSlice';
+
+function Counter() {
+  const count = useSelector((state) => state.counter.value);
+  const dispatch = useDispatch();
+
+  return (
+    <div>
+      <h2>{count}</h2>
+      <button onClick={() => dispatch(increment())}>+</button>
+      <button onClick={() => dispatch(decrement())}>−</button>
+      <button onClick={() => dispatch(incrementByAmount(5))}>+5</button>
+    </div>
+  );
+}
+```
+
+```jsx
+import { Provider } from 'react-redux';
+import { store } from './store';
+import App from './App';
+
+function Root() {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+}
+```
+
+| Traditional Redux                | Redux Toolkit with `configureStore()` |
+| -------------------------------- | ------------------------------------- |
+| Manual `createStore`, middleware | Automatic setup with smart defaults   |
+| Needs `combineReducers()`        | Accepts an object of slice reducers   |
+| Needs Redux DevTools extension   | Built-in support                      |
+
+---
