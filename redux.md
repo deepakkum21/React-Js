@@ -130,6 +130,11 @@ const dispatch = useDispatch();
 dispatch({ type: 'ACTION_TYPE', payload: data });
 ```
 
+| Hook            | Purpose                      | Example Use                         |
+| --------------- | ---------------------------- | ----------------------------------- |
+| `useDispatch()` | Sends actions to Redux store | `dispatch(increment())`             |
+| `useSelector()` | Reads state from Redux store | `useSelector(state => state.value)` |
+
 ---
 
 ```jsx
