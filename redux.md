@@ -12,3 +12,7 @@
 | **Performance**    | Re-renders all consumers on change | Fine-grained control with `connect()`                |
 | **Async Logic**    | Manual via effects or custom hooks | Handled with Redux middleware like `thunk` or `saga` |
 | **Learning Curve** | Very easy                          | Moderate to steep                                    |
+
+## Redux core
+
+![Redux Core](./img/redux-core.png)
