@@ -92,7 +92,7 @@ store.dispatch('decrement');
    - `Provider`
    - `useSelector`
    - `useDispatch`
-2. **redux-toolkit**
+2. **redux-toolkit [@reduxjs/toolkit]**
    - `configureStore`
    - `createSlice`
 
@@ -217,3 +217,42 @@ function App() {
   );
 }
 ```
+
+---
+
+# React-toolkit [@reduxjs/toolkit]
+
+## 1. createSlice
+
+- it simplifies
+  - Writing constants for action types
+  - Writing action creators
+  - Writing switch-case logic in reducers
+- `With createSlice(), Redux Toolkit generates all of this automatically` for you.
+
+```jsx
+import { createSlice } from '@reduxjs/toolkit';
+
+const slice = createSlice({
+  name: 'featureName', // Name for the slice
+  initialState: {}, // Initial state
+  reducers: {
+    // Reducer logic (mutating is allowed via Immer)
+    someAction: (state, action) => {
+      /* update state */
+    },
+  },
+});
+
+export const { someAction } = slice.actions; // returns Action creators
+export default slice.reducer; // return Reducer
+```
+
+### 🧠 Under the Hood
+
+- createSlice() `uses Immer, so you can "mutate" the state safely (it’s still immutable behind the scenes)`.
+- Returns:
+  - A reducer function for use in configureStore()
+    - `const { someAction } = slice.actions`
+  - Auto-generated action creators
+    - `const reducer = slice.reducer`
