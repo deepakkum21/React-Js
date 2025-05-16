@@ -164,6 +164,8 @@ const counterReducer = (state = initialState, action) = {
     }
     return state;
 }
+
+const store = createStore(counterReducer);
 ```
 
 ```jsx
