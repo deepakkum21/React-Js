@@ -283,3 +283,61 @@ VOlumes
 - storage class
 	- create persistentVolume dynamically
 	- pod claims via PVC --> PVC request for storage vis storage class[SC] --> SC create PV that meets the need for PVC
+
+🧱 Workloads (Apps you run)
+| Kind          | Purpose                                                           |
+| ------------- | ----------------------------------------------------------------- |
+| `Pod`         | A group of one or more containers.                                |
+| `Deployment`  | Manages stateless pods with rolling updates.                      |
+| `StatefulSet` | Manages stateful pods with stable IDs.                            |
+| `DaemonSet`   | Ensures one pod per node (e.g., for logging agents).              |
+| `ReplicaSet`  | Ensures a specified number of pod replicas (used by Deployments). |
+| `Job`         | Runs a task to completion (batch jobs).                           |
+| `CronJob`     | Runs jobs on a time schedule (like a cron task).                  |
+
+🌐 Networking
+| Kind            | Purpose                                                                |
+| --------------- | ---------------------------------------------------------------------- |
+| `Service`       | Exposes pods internally or externally (via ClusterIP, NodePort, etc.). |
+| `Ingress`       | Manages external access (HTTP/HTTPS routing to services).              |
+| `IngressClass`  | Configures the Ingress controller type.                                |
+| `NetworkPolicy` | Controls network traffic to/from pods.                                 |
+
+📦 Storage
+| Kind                          | Purpose                                                 |
+| ----------------------------- | ------------------------------------------------------- |
+| `PersistentVolume` (PV)       | Represents a piece of storage in the cluster.           |
+| `PersistentVolumeClaim` (PVC) | Requests storage for use by a pod.                      |
+| `StorageClass`                | Defines how storage is provisioned (e.g., dynamically). |
+| `VolumeAttachment`            | Handles volume attachment/detachment to nodes.          |
+
+⚙️ Configuration & Secrets
+| Kind             | Purpose                                         |
+| ---------------- | ----------------------------------------------- |
+| `ConfigMap`      | Stores non-sensitive configuration data.        |
+| `Secret`         | Stores sensitive data like passwords or tokens. |
+| `ServiceAccount` | Provides identity for pods to access the API.   |
+
+🔒 Access Control & Security
+| Kind                 | Purpose                                         |
+| -------------------- | ----------------------------------------------- |
+| `Role`               | Defines permissions within a namespace.         |
+| `ClusterRole`        | Like Role, but cluster-wide.                    |
+| `RoleBinding`        | Assigns a Role to a user/group/service account. |
+| `ClusterRoleBinding` | Assigns a ClusterRole.                          |
+| `PodSecurityPolicy`  | (Deprecated) Security rules for pod execution.  |
+
+🧭 Namespaces & Metadata
+| Kind            | Purpose                                     |
+| --------------- | ------------------------------------------- |
+| `Namespace`     | Isolates resources in the cluster.          |
+| `LimitRange`    | Sets default limits/requests for pods.      |
+| `ResourceQuota` | Limits total resource usage in a namespace. |
+| `LabelSelector` | Selects resources by labels.                |
+
+📡 Monitoring & Events
+| Kind                             | Purpose                                           |
+| -------------------------------- | ------------------------------------------------- |
+| `Event`                          | System events (e.g., pod failed to start).        |
+| `HorizontalPodAutoscaler`        | Automatically scales pods based on metrics.       |
+| `CustomResourceDefinition` (CRD) | Allows defining custom resources in your cluster. |
