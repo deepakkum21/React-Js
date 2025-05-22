@@ -1,0 +1,282 @@
+Pod
+- 1 pod may have multiple containers
+- each pod gets virtual ip address
+Service
+- using service per pod gets static IP address
+	- static address or per IP address is used to communicate externallynodes
+- for loadbalacing
+- loose coupling
+
+Service types
+	- internal [for DB]
+		- type:- CLUSTERIP [default]
+	- external [for UI]
+		- take make a service as external
+			- type:- loadbalancer
+			- add 3rd port NODEPORT [to be used via browser] [32000 - 32767]
+		-in minikube to assign external ip
+			- minikube service service-name
+	
+Nodes
+	- physical or virtual machine that runs part of the Kubernetes cluster
+	- responsible for running pods
+	- Master node
+		- all api communication via master [auth, any api request from ui/external]
+		- scheduling [in which node new pod to created/scheduled based on node resource availability]
+		- controller manager [detects the pods cashing in nodes and sheduling new pod creating in node via kubelet]
+		- etcd [key value pair, pods crashed, API server can inetract]
+	- Worker/ node
+		- runs the application pods
+	- Node Components
+		- kubelet - which communicates with the master/control plane and manages containers on the node, assigning resource to pods.
+		- kube-proxy - handles networking for the node, routing traffic to right pods
+		- container runtime - docker
+	- kubectl get 
+	
+ConfigMap
+	- contains the configuration eg name of the db service, the spring boot service can read through that
+	
+Secret
+	- same as configMap but used to store secrets like username password in encryption[base64]
+
+VOlumes
+	- since pods dont have data stored, with vol a phyical data drive to store the data even if pods are destroyed
+
+Daemon Set
+- if one want pods to be placed in all nodes at least one copy
+- logs can of deamon
+- monitoring
+
+Pod blueprints
+Deployment
+- for ui or other than dbs
+- pod names are random
+- random and fast updates.
+
+SatefulSet
+- for dbs
+- pod names are predictable mysql-0,mysql-1
+- rolling updates are controlled ie.e one by one
+
+Miniqube
+- 1 node cluster for local machine using virtual box
+- single node has master/workernode with all of its processes installed
+
+Kubectl - cli to interact with cluster local or prod level
+
+start minikube
+- minikube start --vm-driver=hyperkit
+
+kubectl
+- kubectl get pods
+- kubectl get services
+- kubectl get deployments
+- kubectl create deployment nameFoDepl --imahge=image [options replicaset]
+- kubectl logs deploymentPOdname
+- kubectl exec -it deploymentPOdname -- bin/bash  [to go into bash terminal of pod] in interactive mode
+- kubectl delete deployment deploymentName
+- kubectl apply -f filenamefoTheConfiguration.yaml
+
+pod name = deploymnetName-replicatesetid-ownid
+
+Deploymnet manages replicaset
+	replicaset manages	pods
+		pod manages container
+		
+Config files [deployment/services]
+- 3 common parts
+	- common things [apiVersion, kind- (deployment/service)
+	- metadata [name, labels]
+	- specification [template[metadata,spec(containers)],replicas,selector]
+	- status
+
+Mongo DB deployment
+-------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment
+  labels:
+    app: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: mongo-root-username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: mongodb-secret
+              key: mongo-root-password
+			  
+Mongo-Service
+-------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+
+Mongo-secret
+------------
+apiVersion: v1
+kind: Secret
+metadata:
+    name: mongodb-secret
+type: Opaque
+data:
+    mongo-root-username: dXNlcm5hbWU=
+    mongo-root-password: cGFzc3dvcmQ=
+	
+Mongo Config Map
+-----------------
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongodb-configmap
+data:
+  database_url: mongodb-service
+	
+Mongo-Express [mongo ui client]
+------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-express
+  labels:
+    app: mongo-express
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-express
+  template:
+    metadata:
+      labels:
+        app: mongo-express
+    spec:
+      containers:
+      - name: mongo-express
+        image: mongo-express
+        ports:
+        - containerPort: 8081
+        env:
+        - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: mongo-root-username
+        - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: mongodb-secret
+              key: mongo-root-password
+        - name: ME_CONFIG_MONGODB_SERVER
+          valueFrom: 
+            configMapKeyRef:
+              name: mongodb-configmap
+              key: database_url
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-express-service
+  namespace: custom-namespace
+spec:
+  selector:
+    app: mongo-express
+  type: LoadBalancer  
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+      nodePort: 30000
+
+Namespace
+---------
+logical grouping of components
+Why?
+- resources group, fro readability and maintainabiity
+- to avoid conflicts same deployment can be used in different namespace
+- resource sharing
+- access control for particular namespace and resource limit
+- services can be shared
+- configMap and secrets can't be shared across namespace
+- Volumes and nodes can't be bound to a namespace
+
+Ways to apply namespace
+- kubectl apply -f configName -n=namespaceName
+- mention in the config file
+	apiVersion: v1
+	kind: ConfigMap
+	metadata:
+	  name: mongodb-configmap
+	  namespace: custom-namespace
+	data:
+	  database_url: mongodb-service
+
+- To change the active namespace from deafult to custom-namespace
+	- instal kubens [kubectl don't have]
+	- kubens custom-namespace [now active namespcae is custom-namespace]
+	
+Ingress
+----------	
+Ingress used to give a proper name to external IP address
+its forwards the request to internal service
+ui --> ingress --> internal --> service --> mypod
+
+Ingress Controller
+- evaluates the rules
+- manages the re-directions
+- entrypoint to the cluster
+- many 3rd party
+	- k8 nginx ingres controller
+
+HELM
+----
+- package manager in k8
+- helm charts
+	- packing all yaml files [service, deployments, secrets, configMap] for a particular eg db/monitoring tool
+	- someone created helm chart for db, monitoring tool we can use that from help repo by reusing the configuration
+- also used as TEMPLATING ENGINE
+	- creation of multiple microservice where all config are same except few
+	- for that create a basic blueprint and use dynamic placeholder to get value from values.yaml
+
+VOlumes
+-------
+- persistentVolume
+	- A storage resource in the cluster (like a disk).
+	- Waits to be claimed by a PVC
+	- not namespaced
+	- taken care by ADMIN
+- persistentVolumeClaim [PVC]
+	- request for storage by a pod or user
+	- Binds to an available matching PV
+	- it has to be in same namespace as of POD
+	- taken care by DEVELOPER
+	- developer don't need to worry about the volume where it is created
+- storage class
+	- create persistentVolume dynamically
+	- pod claims via PVC --> PVC request for storage vis storage class[SC] --> SC create PV that meets the need for PVC
